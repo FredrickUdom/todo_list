@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { TodoStatus } from "../enum/todo.enum";
+import { TodoStatus } from "../todo/enum/todo.enum";
 
 export class todoDto{
     @IsNotEmpty()

@@ -28,7 +28,7 @@ import { AuthModule } from './auth/auth.module';
 
     TodoModule,
 
-    AuthModule,
+    // AuthModule,
     
   ],
   controllers: [],

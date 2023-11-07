@@ -1,6 +1,6 @@
 import { TodoService } from './todo.service';
 import { Todo } from './entity/todo.entity';
-import { todoDto } from './dto/todo.dto';
+import { todoDto } from '../dto/todo.dto';
 import { TodoStatus } from './enum/todo.enum';
 export declare class TodoController {
     private readonly todoService;

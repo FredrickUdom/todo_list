@@ -12,7 +12,6 @@ const todo_module_1 = require("./todo/todo.module");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const constant_1 = require("./todo/constant/constant");
-const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,7 +35,6 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService]
             }),
             todo_module_1.TodoModule,
-            auth_module_1.AuthModule,
         ],
         controllers: [],
         providers: [],

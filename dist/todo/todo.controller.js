@@ -15,9 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TodoController = void 0;
 const common_1 = require("@nestjs/common");
 const todo_service_1 = require("./todo.service");
-const todo_dto_1 = require("./dto/todo.dto");
+const todo_dto_1 = require("../dto/todo.dto");
 const todo_status_validation_pipe_pipe_1 = require("../todo-status-validation-pipe/todo-status-validation-pipe.pipe");
 const todo_enum_1 = require("./enum/todo.enum");
+const passport_1 = require("@nestjs/passport");
 let TodoController = class TodoController {
     constructor(todoService) {
         this.todoService = todoService;
@@ -72,6 +73,7 @@ __decorate([
 ], TodoController.prototype, "findALlTodo", null);
 exports.TodoController = TodoController = __decorate([
     (0, common_1.Controller)('todo'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)()),
     __metadata("design:paramtypes", [todo_service_1.TodoService])
 ], TodoController);
 //# sourceMappingURL=todo.controller.js.map

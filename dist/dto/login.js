@@ -9,25 +9,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.todoDto = void 0;
+exports.loginDto = void 0;
 const class_validator_1 = require("class-validator");
-const todo_enum_1 = require("../enum/todo.enum");
-class todoDto {
+class loginDto {
 }
-exports.todoDto = todoDto;
+exports.loginDto = loginDto;
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], loginDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(6),
+    (0, class_validator_1.MaxLength)(16),
+    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, { message: 'password must conatain atleast One Uppercase, One number and One special key' }),
     __metadata("design:type", String)
-], todoDto.prototype, "title", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], todoDto.prototype, "description", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], todoDto.prototype, "status", void 0);
-//# sourceMappingURL=todo.dto.js.map
+], loginDto.prototype, "password", void 0);
+//# sourceMappingURL=login.js.map

@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { Todo } from './entity/todo.entity';
-import {  todoDto } from './dto/todo.dto';
+import {  todoDto } from '../dto/todo.dto';
 import { TodoStatusValidationPipePipe } from '../todo-status-validation-pipe/todo-status-validation-pipe.pipe';
 import { TodoStatus } from './enum/todo.enum';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('todo')
+@UseGuards(AuthGuard())
 export class TodoController {
     constructor(private readonly todoService:TodoService){}
 

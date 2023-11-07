@@ -1,7 +1,7 @@
 import { Todo } from './entity/todo.entity';
 import { Repository } from 'typeorm';
 import { TodoStatus } from './enum/todo.enum';
-import { todoDto } from './dto/todo.dto';
+import { todoDto } from '../dto/todo.dto';
 export declare class TodoService {
     private readonly todoRepo;
     constructor(todoRepo: Repository<Todo>);
