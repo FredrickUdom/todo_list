@@ -19,12 +19,14 @@ const todo_dto_1 = require("../dto/todo.dto");
 const todo_status_validation_pipe_pipe_1 = require("../todo-status-validation-pipe/todo-status-validation-pipe.pipe");
 const todo_enum_1 = require("./enum/todo.enum");
 const passport_1 = require("@nestjs/passport");
+const user_decorator_1 = require("../auth/decorator/user.decorator");
+const user_entity_1 = require("./entity/user.entity");
 let TodoController = class TodoController {
     constructor(todoService) {
         this.todoService = todoService;
     }
-    async createTodo(payload) {
-        return await this.todoService.createTodo(payload);
+    async createTodo(payload, user) {
+        return await this.todoService.createTodo(payload, user);
     }
     async Update(status, id) {
         const update = await this.todoService.updateStatus(id, status);
@@ -38,16 +40,17 @@ let TodoController = class TodoController {
             message: 'deleted successfully'
         };
     }
-    async findALlTodo() {
-        await this.todoService.findAll();
+    async findALlTodo(user) {
+        return await this.todoService.findAll(user);
     }
 };
 exports.TodoController = TodoController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, user_decorator_1.UserDecorator)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [todo_dto_1.todoDto]),
+    __metadata("design:paramtypes", [todo_dto_1.todoDto, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TodoController.prototype, "createTodo", null);
 __decorate([
@@ -67,8 +70,9 @@ __decorate([
 ], TodoController.prototype, "deleteTodo", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, user_decorator_1.UserDecorator)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TodoController.prototype, "findALlTodo", null);
 exports.TodoController = TodoController = __decorate([

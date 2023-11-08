@@ -8,7 +8,7 @@ import { loginDto } from 'src/dto/login.dto';
 export class AuthController {
     constructor(private authService: AuthService){}
 
-    @Post()
+    @Post('signup')
     async registration(@Body()payload:signupDto):Promise<User>{
         return await this.authService.signUp(payload)
     }

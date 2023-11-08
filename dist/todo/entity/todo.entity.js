@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Todo = void 0;
 const typeorm_1 = require("typeorm");
 const todo_enum_1 = require("../enum/todo.enum");
+const user_entity_1 = require("./user.entity");
 let Todo = class Todo {
 };
 exports.Todo = Todo;
@@ -37,6 +38,14 @@ __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Todo.prototype, "created_At", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.todo),
+    __metadata("design:type", user_entity_1.User)
+], Todo.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Todo.prototype, "userId", void 0);
 exports.Todo = Todo = __decorate([
     (0, typeorm_1.Entity)()
 ], Todo);

@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TodoStatus } from "../enum/todo.enum";
+import { User } from "./user.entity";
 
 @Entity()
 export class Todo{
@@ -19,4 +20,10 @@ export class Todo{
 
     @CreateDateColumn()
     created_At: Date;
+
+    @ManyToOne(() => User, (user) => user.todo)
+    user: User;
+
+    @Column()
+    userId: number;
 }

@@ -1,1 +1,1 @@
-export declare const User: (...dataOrPipes: unknown[]) => ParameterDecorator;
+export declare const UserDecorator: (...dataOrPipes: unknown[]) => ParameterDecorator;

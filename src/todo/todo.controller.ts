@@ -5,6 +5,8 @@ import {  todoDto } from '../dto/todo.dto';
 import { TodoStatusValidationPipePipe } from '../todo-status-validation-pipe/todo-status-validation-pipe.pipe';
 import { TodoStatus } from './enum/todo.enum';
 import { AuthGuard } from '@nestjs/passport';
+import { UserDecorator } from '../auth/decorator/user.decorator';
+import { User } from './entity/user.entity';
 
 @Controller('todo')
 @UseGuards(AuthGuard())
@@ -12,8 +14,8 @@ export class TodoController {
     constructor(private readonly todoService:TodoService){}
 
     @Post()
-    async createTodo(@Body()payload:todoDto):Promise<Todo>{
-        return await this.todoService.createTodo(payload);
+    async createTodo(@Body()payload:todoDto, @UserDecorator()user:User):Promise<Todo>{
+        return await this.todoService.createTodo(payload, user);
     }
 
 
@@ -37,7 +39,7 @@ export class TodoController {
 }
 
     @Get()
-    async findALlTodo(){
-        await this.todoService.findAll()
+    async findALlTodo(@UserDecorator()user:User){
+       return  await this.todoService.findAll(user)
     }
 }

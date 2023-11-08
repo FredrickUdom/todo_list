@@ -22,11 +22,12 @@ let TodoService = class TodoService {
     constructor(todoRepo) {
         this.todoRepo = todoRepo;
     }
-    async createTodo(todos) {
+    async createTodo(todos, user) {
         const todo = new todo_entity_1.Todo();
         todo.title = todos.title;
         todo.description = todos.description;
         todo.status = todo_enum_1.TodoStatus.OPEN;
+        todo.userId = user.id;
         this.todoRepo.create(todo);
         return await this.todoRepo.save(todo);
     }
@@ -41,8 +42,16 @@ let TodoService = class TodoService {
         }
         await this.todoRepo.delete(id);
     }
-    async findAll() {
-        return await this.todoRepo.find();
+    async findAll(user) {
+        const query = await this.todoRepo.createQueryBuilder('todo');
+        query.where('todo.userId = :userId', { userId: user.id });
+        try {
+            return await query.getMany();
+        }
+        catch (error) {
+            console.log(error);
+            throw new common_1.NotFoundException('No todo found');
+        }
     }
 };
 exports.TodoService = TodoService;

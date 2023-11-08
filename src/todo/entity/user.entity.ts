@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Todo } from "./todo.entity";
 
 @Entity()
 export class User{
@@ -13,5 +14,11 @@ export class User{
 
     @Column()
     password: string;
+    
+    @CreateDateColumn()
+    created_At: Date;
+
+    @OneToMany(() => Todo, (todo) => todo.user)
+    todo:Todo[];
 
 }
