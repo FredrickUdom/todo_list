@@ -19,21 +19,21 @@ export class TodoController {
     @Post()
     @UseGuards(AuthGuard(),RolesGuard)
     @Roles('admin','vendor')
-    async createTodo(@Body()payload:todoDto){
+    async createTodo(@Body()payload, @UserDecorator() req){
         
-        return await this.todoService.createTodo(payload);
+        return await this.todoService.createTodo(payload, req);
     }
 
 
-    @Put(':id')
-    async Update(@Body('status', TodoStatusValidationPipePipe)status:TodoStatus,
-    @Param('id')id:number
-    ){
-        const update = await this.todoService.updateStatus(id, status);
-        if(!update){
-            throw new HttpException('sorry no such satatus found', 404)
-        }
-    }
+    // @Put(':id')
+    // async Update(@Body('status', TodoStatusValidationPipePipe)status:TodoStatus,
+    // @Param('id')id:number
+    // ){
+    //     const update = await this.todoService.updateStatus(id, status);
+    //     if(!update){
+    //         throw new HttpException('sorry no such satatus found', 404)
+    //     }
+    // }
 
     @Delete(':id')
     async deleteTodo(@Param('id')id){
@@ -44,8 +44,8 @@ export class TodoController {
     }
 }
 
-    @Get()
-    async findALlTodo(@UserDecorator()user:User){
-       return  await this.todoService.findAll(user)
-    }
+    // @Get()
+    // async findALlTodo(@UserDecorator()user:User){
+    //    return  await this.todoService.findAll(user)
+    // }
 }
