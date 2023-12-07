@@ -13,4 +13,7 @@ export class todoDto{
     @IsOptional()
     @IsString()
     status: TodoStatus;
+
+    @IsNotEmpty()
+    userId:number;
 }

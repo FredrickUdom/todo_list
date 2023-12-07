@@ -30,4 +30,8 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], todoDto.prototype, "status", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], todoDto.prototype, "userId", void 0);
 //# sourceMappingURL=todo.dto.js.map

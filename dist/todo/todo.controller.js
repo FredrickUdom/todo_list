@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TodoController = void 0;
 const common_1 = require("@nestjs/common");
 const todo_service_1 = require("./todo.service");
+const todo_dto_1 = require("../dto/todo.dto");
 const todo_status_validation_pipe_pipe_1 = require("../todo-status-validation-pipe/todo-status-validation-pipe.pipe");
 const todo_enum_1 = require("./enum/todo.enum");
 const passport_1 = require("@nestjs/passport");
@@ -26,8 +27,8 @@ let TodoController = class TodoController {
     constructor(todoService) {
         this.todoService = todoService;
     }
-    async createTodo(payload, req) {
-        return await this.todoService.createTodo(payload, req);
+    async createTodo(payload) {
+        return await this.todoService.createTodo(payload);
     }
     async Update(status, id) {
         const update = await this.todoService.updateStatus(id, status);
@@ -51,9 +52,8 @@ __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), role_guard_1.RolesGuard),
     (0, roles_1.Roles)('admin', 'vendor'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, user_decorator_1.UserDecorator)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [todo_dto_1.todoDto]),
     __metadata("design:returntype", Promise)
 ], TodoController.prototype, "createTodo", null);
 __decorate([
