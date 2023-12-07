@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards, Req } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { Todo } from './entity/todo.entity';
 import {  todoDto } from '../dto/todo.dto';
@@ -7,6 +7,9 @@ import { TodoStatus } from './enum/todo.enum';
 import { AuthGuard } from '@nestjs/passport';
 import { UserDecorator } from '../auth/decorator/user.decorator';
 import { User } from './entity/user.entity';
+import { Request } from 'express';
+import { RolesGuard } from 'src/auth/guard/role.guard';
+import { Roles } from 'src/auth/guard/roles';
 
 @Controller('todo')
 @UseGuards(AuthGuard())
@@ -14,8 +17,11 @@ export class TodoController {
     constructor(private readonly todoService:TodoService){}
 
     @Post()
-    async createTodo(@Body()payload:todoDto, @UserDecorator()user:User):Promise<Todo>{
-        return await this.todoService.createTodo(payload, user);
+    @UseGuards(AuthGuard(),RolesGuard)
+    @Roles('admin','vendor')
+    async createTodo(@Body()payload, @UserDecorator() req){
+        
+        return await this.todoService.createTodo(payload, req);
     }
 
 

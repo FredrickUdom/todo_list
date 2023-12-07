@@ -15,10 +15,10 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: configService.getOrThrow<string>('JWT_SECRET'),
         signOptions:{
-          algorithm: 'HS512',
-          expiresIn: configService.get<string>('JWT_EXPIRESIN')
+          algorithm: configService.getOrThrow('JWT_ALGORITHM'),
+          expiresIn: configService.getOrThrow<string>('JWT_EXPIRESIN')
         }
       }),
       inject: [ConfigService],
@@ -31,6 +31,6 @@ import { JwtStrategy } from './strategy/jwt.strategy';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports:[JwtStrategy, PassportModule]
+  exports:[JwtStrategy, PassportModule,AuthService]
 })
 export class AuthModule {}

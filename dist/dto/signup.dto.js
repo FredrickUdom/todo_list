@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signupDto = void 0;
 const class_validator_1 = require("class-validator");
+const role_enum_1 = require("../todo/enum/role.enum");
 class signupDto {
 }
 exports.signupDto = signupDto;
@@ -27,9 +28,13 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(6),
+    (0, class_validator_1.MinLength)(8, { message: 'sorry you must put in 8 xter' }),
     (0, class_validator_1.MaxLength)(16),
-    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, { message: 'password must conatain atleast One Uppercase, One number and One special key' }),
+    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, { message: 'password must contain atleast One Uppercase, One number and One special key' }),
     __metadata("design:type", String)
 ], signupDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], signupDto.prototype, "role", void 0);
 //# sourceMappingURL=signup.dto.js.map

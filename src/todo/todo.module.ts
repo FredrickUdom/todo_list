@@ -4,10 +4,11 @@ import { TodoService } from './todo.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Todo } from './entity/todo.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { User } from './entity/user.entity';
 
 @Module({
   imports:[
-    TypeOrmModule.forFeature([Todo]),
+    TypeOrmModule.forFeature([Todo, User]),
     AuthModule
   ],
 

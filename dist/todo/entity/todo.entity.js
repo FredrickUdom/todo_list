@@ -39,14 +39,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Todo.prototype, "created_At", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.todo),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.todos),
     __metadata("design:type", user_entity_1.User)
 ], Todo.prototype, "user", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Todo.prototype, "userId", void 0);
 exports.Todo = Todo = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)({ name: 'Todo' })
 ], Todo);
 //# sourceMappingURL=todo.entity.js.map

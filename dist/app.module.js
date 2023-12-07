@@ -23,7 +23,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 useFactory: (configService) => ({
-                    type: 'mysql',
+                    type: 'postgres',
                     host: configService.getOrThrow('DB_HOST'),
                     port: configService.getOrThrow('DB_PORT'),
                     username: configService.getOrThrow('DB_USER'),

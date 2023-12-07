@@ -26,10 +26,10 @@ exports.AuthModule = AuthModule = __decorate([
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: async (configService) => ({
-                    secret: configService.get('JWT_SECRET'),
+                    secret: configService.getOrThrow('JWT_SECRET'),
                     signOptions: {
-                        algorithm: 'HS512',
-                        expiresIn: configService.get('JWT_EXPIRESIN')
+                        algorithm: configService.getOrThrow('JWT_ALGORITHM'),
+                        expiresIn: configService.getOrThrow('JWT_EXPIRESIN')
                     }
                 }),
                 inject: [config_1.ConfigService],
@@ -40,7 +40,7 @@ exports.AuthModule = AuthModule = __decorate([
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
-        exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule]
+        exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule, auth_service_1.AuthService]
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

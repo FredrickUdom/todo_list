@@ -22,13 +22,12 @@ let TodoService = class TodoService {
     constructor(todoRepo) {
         this.todoRepo = todoRepo;
     }
-    async createTodo(todos, user) {
+    async createTodo(payload, userId) {
         const todo = new todo_entity_1.Todo();
-        todo.title = todos.title;
-        todo.description = todos.description;
+        todo.title = payload.title;
+        todo.description = payload.description;
         todo.status = todo_enum_1.TodoStatus.OPEN;
-        todo.userId = user.id;
-        this.todoRepo.create(todo);
+        todo.user = { id: userId };
         return await this.todoRepo.save(todo);
     }
     async updateStatus(id, status) {
@@ -44,7 +43,7 @@ let TodoService = class TodoService {
     }
     async findAll(user) {
         const query = await this.todoRepo.createQueryBuilder('todo');
-        query.where('todo.userId = :userId', { userId: user.id });
+        query.where(`todo.userId = :userId`, { userId: user.id });
         try {
             return await query.getMany();
         }

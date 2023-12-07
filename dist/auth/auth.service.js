@@ -11,6 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
@@ -25,16 +36,25 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
     }
     async signUp(payload) {
-        const { userName, email, password } = payload;
+        const { email, password } = payload, rest = __rest(payload, ["email", "password"]);
         const userEmail = await this.userRepo.findOne({ where: { email: email } });
         if (userEmail) {
             throw new common_1.HttpException('sorry email already exist', 400);
         }
         ;
         const hashPassword = await bcrypt.hash(password, 10);
-        const user = await this.userRepo.save({ userName, email, password: hashPassword });
-        delete user.password;
-        return user;
+        try {
+            const user = await this.userRepo.save(Object.assign({ email, password: hashPassword }, rest));
+            await this.userRepo.save(user);
+            delete user.password;
+            return user;
+        }
+        catch (err) {
+            if (err.code === '22P02') {
+                return 'na error be this oooo';
+            }
+            return err;
+        }
     }
     async signIn(payload) {
         const { email, password } = payload;
@@ -48,6 +68,51 @@ let AuthService = class AuthService {
         const jwtPayload = { id: user.id, userName: user.userName };
         const jwtToken = await this.jwtService.signAsync(jwtPayload);
         return { token: jwtToken };
+    }
+    async findEmail(email) {
+        const mail = await this.userRepo.findOneByOrFail({ email });
+        if (!mail) {
+            throw new common_1.UnauthorizedException();
+        }
+        return mail;
+    }
+    async user(headers) {
+        const authorizationHeader = headers.authorization;
+        if (authorizationHeader) {
+            const token = authorizationHeader.replace('Bearer ', '');
+            const secret = process.env.JWT_SECRET;
+            try {
+                const decoded = this.jwtService.verify(token);
+                let id = decoded["id"];
+                let user = await this.userRepo.findOneBy({ id });
+                return { id, name: user.userName, email: user.email, role: user.role };
+            }
+            catch (error) {
+                throw new common_1.UnauthorizedException('Invalid token');
+            }
+        }
+        else {
+            throw new common_1.UnauthorizedException('Invalid or missing Bearer token');
+        }
+    }
+    async updateUser(headers, updateUser) {
+        const authorizationHeader = headers.authorization;
+        if (authorizationHeader) {
+            const token = authorizationHeader.replace('Bearer ', '');
+            const secret = process.env.JWT_SECRET;
+            try {
+                const decoded = this.jwtService.verify(token);
+                let id = decoded["id"];
+                let user = await this.findEmail(id);
+                return { id, name: user.userName, email: user.email, role: user.role };
+            }
+            catch (error) {
+                throw new common_1.UnauthorizedException('Invalid token');
+            }
+        }
+        else {
+            throw new common_1.UnauthorizedException('Invalid or missing Bearer token');
+        }
     }
 };
 exports.AuthService = AuthService;
