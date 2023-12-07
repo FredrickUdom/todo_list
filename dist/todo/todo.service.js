@@ -17,17 +17,11 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const todo_entity_1 = require("./entity/todo.entity");
 const typeorm_2 = require("typeorm");
-const todo_enum_1 = require("./enum/todo.enum");
 let TodoService = class TodoService {
     constructor(todoRepo) {
         this.todoRepo = todoRepo;
     }
-    async createTodo(payload) {
-        const todo = new todo_entity_1.Todo();
-        todo.title = payload.title;
-        todo.description = payload.description;
-        todo.status = todo_enum_1.TodoStatus.OPEN;
-        todo.userId = payload.userId;
+    async createTodo() {
         return await this.todoRepo.save(todo);
     }
     async updateStatus(id, status) {
