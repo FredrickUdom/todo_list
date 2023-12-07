@@ -47,7 +47,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.OneToMany)(() => todo_entity_1.Todo, (todo) => todo.user),
     __metadata("design:type", Array)
-], User.prototype, "todos", void 0);
+], User.prototype, "todo", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)({ name: 'User' })
 ], User);

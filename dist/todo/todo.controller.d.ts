@@ -11,5 +11,5 @@ export declare class TodoController {
     deleteTodo(id: any): Promise<{
         message: string;
     }>;
-    findALlTodo(user: User): Promise<Todo[]>;
+    findALlTodo(user: User): Promise<any>;
 }

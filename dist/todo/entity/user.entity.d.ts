@@ -7,5 +7,5 @@ export declare class User {
     password: string;
     role: UserRole;
     created_At: Date;
-    todos: Todo[];
+    todo: Todo[];
 }

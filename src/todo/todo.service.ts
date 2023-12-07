@@ -1,7 +1,7 @@
-import { HttpException, Injectable, NotFoundException, Req, Request } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, Req, Request } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from './entity/todo.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
 
 import { TodoStatus } from './enum/todo.enum';
 import { todoDto } from '../dto/todo.dto';
@@ -12,17 +12,23 @@ import { UserDecorator } from 'src/auth/decorator/user.decorator';
 
 @Injectable()
 export class TodoService {
-    constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<Todo>
+    constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<User>,@InjectRepository(User) private readonly userRepo: Repository<User>
     ){}
 
-    async createTodo():Promise<Todo>{
-
+    async createTodo(userId:number, payload:todoDto):Promise<Todo>{
+        const options: FindOneOptions<User> = {
+            where: { id: userId },
+          };
       
-            // const todo = new Todo();
-            // todo.title = payload.title;
-            // todo.description = payload.description;
-            // todo.status = TodoStatus.OPEN;
-            // todo.userId = payload.userId;
+        const uniqueUser = await this.userRepo.findOne(options)
+        if(!uniqueUser){
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+            const todo = new Todo();
+            todo.title = payload.title;
+            todo.description = payload.description;
+            todo.status = TodoStatus.OPEN;
+            todo.user = uniqueUser
            
 
             return await this.todoRepo.save(todo)
@@ -53,18 +59,14 @@ export class TodoService {
     //    console.log(user.id)
 
     // const todoPost = await this.todoRepo.create(todo)
-       
-
-   
-
-      
-    }
-
-    async updateStatus(id: number, status:TodoStatus){
-        await this.todoRepo.update({id}, {status})
-       return this.todoRepo.findOneBy({id})
         
     }
+
+    // async updateStatus(id: number, status:TodoStatus){
+    //     await this.todoRepo.update({id}, {status})
+    //    return this.todoRepo.findOneBy({id})
+        
+    // }
 
     async deleteTodo(id: number){
         const findDelete = await this.todoRepo.findOneBy({id})
@@ -74,19 +76,19 @@ export class TodoService {
         await this.todoRepo.delete(id)
     }
 
-    async findAll(user:User):Promise<Todo[]>{
-    //    return await this.todoRepo.find()
-        const query = await this.todoRepo.createQueryBuilder('todo');
+    // async findAll(user:User):Promise<Todo[]>{
+    // //    return await this.todoRepo.find()
+    //     const query = await this.todoRepo.createQueryBuilder('todo');
 
-        query.where(`todo.userId = :userId`,{userId:user.id})
+    //     query.where(`todo.userId = :userId`,{userId:user.id})
         
 
-        try {
-            return await query.getMany()
-        } catch (error) {
-            console.log(error)
-            throw new NotFoundException('No todo found')
-        }
+    //     try {
+    //         return await query.getMany()
+    //     } catch (error) {
+    //         console.log(error)
+    //         throw new NotFoundException('No todo found')
+    //     }
         
-    }
+    // }
 }

@@ -17,16 +17,27 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const todo_entity_1 = require("./entity/todo.entity");
 const typeorm_2 = require("typeorm");
+const todo_enum_1 = require("./enum/todo.enum");
+const user_entity_1 = require("./entity/user.entity");
 let TodoService = class TodoService {
-    constructor(todoRepo) {
+    constructor(todoRepo, userRepo) {
         this.todoRepo = todoRepo;
+        this.userRepo = userRepo;
     }
-    async createTodo() {
+    async createTodo(userId, payload) {
+        const options = {
+            where: { id: userId },
+        };
+        const uniqueUser = await this.userRepo.findOne(options);
+        if (!uniqueUser) {
+            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        const todo = new todo_entity_1.Todo();
+        todo.title = payload.title;
+        todo.description = payload.description;
+        todo.status = todo_enum_1.TodoStatus.OPEN;
+        todo.user = uniqueUser;
         return await this.todoRepo.save(todo);
-    }
-    async updateStatus(id, status) {
-        await this.todoRepo.update({ id }, { status });
-        return this.todoRepo.findOneBy({ id });
     }
     async deleteTodo(id) {
         const findDelete = await this.todoRepo.findOneBy({ id });
@@ -35,22 +46,12 @@ let TodoService = class TodoService {
         }
         await this.todoRepo.delete(id);
     }
-    async findAll(user) {
-        const query = await this.todoRepo.createQueryBuilder('todo');
-        query.where(`todo.userId = :userId`, { userId: user.id });
-        try {
-            return await query.getMany();
-        }
-        catch (error) {
-            console.log(error);
-            throw new common_1.NotFoundException('No todo found');
-        }
-    }
 };
 exports.TodoService = TodoService;
 exports.TodoService = TodoService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(todo_entity_1.Todo)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository, typeorm_2.Repository])
 ], TodoService);
 //# sourceMappingURL=todo.service.js.map

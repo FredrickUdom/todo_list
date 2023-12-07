@@ -28,7 +28,8 @@ export class User{
     created_At: Date;
 
     @OneToMany(() => Todo, (todo) => todo.user)
-    todos:Todo[];
+    todo:Todo[];
+    
  
 
 }

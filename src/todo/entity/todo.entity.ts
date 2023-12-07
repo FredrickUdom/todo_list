@@ -21,11 +21,10 @@ export class Todo{
     @CreateDateColumn()
     created_At: Date;
 
-    @ManyToOne(() => User, (user) => user.todos)
+    @ManyToOne(() => User, (user) => user.todo)
     user: User;
 
-    @Column()
-    userId: number;
+   
 
   
 
