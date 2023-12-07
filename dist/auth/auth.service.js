@@ -51,7 +51,7 @@ let AuthService = class AuthService {
         }
         catch (err) {
             if (err.code === '22P02') {
-                return 'na error be this oooo';
+                throw new common_1.BadRequestException('admin role should be lower case');
             }
             return err;
         }

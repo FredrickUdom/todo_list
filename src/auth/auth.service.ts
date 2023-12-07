@@ -1,4 +1,4 @@
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../todo/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -28,7 +28,7 @@ export class AuthService {
            return user;
         } catch (err) {
             if(err.code === '22P02'){
-                return 'na error be this oooo'
+                throw new BadRequestException('admin role should be lower case')
             }
             return err
         }
