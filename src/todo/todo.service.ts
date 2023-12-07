@@ -15,14 +15,15 @@ export class TodoService {
     constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<Todo>
     ){}
 
-    async createTodo(payload:any, userId:number):Promise<Todo>{
+    async createTodo(payload:Todo, user:User):Promise<Todo>{
 
       
             const todo = new Todo();
             todo.title = payload.title;
             todo.description = payload.description;
             todo.status = TodoStatus.OPEN;
-            todo.user = { id: userId } as User;
+            todo.userId = user.id;
+           
 
             return await this.todoRepo.save(todo)
         

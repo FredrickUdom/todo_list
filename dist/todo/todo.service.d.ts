@@ -5,7 +5,7 @@ import { User } from './entity/user.entity';
 export declare class TodoService {
     private readonly todoRepo;
     constructor(todoRepo: Repository<Todo>);
-    createTodo(payload: any, userId: number): Promise<Todo>;
+    createTodo(payload: Todo, user: User): Promise<Todo>;
     updateStatus(id: number, status: TodoStatus): Promise<Todo>;
     deleteTodo(id: number): Promise<void>;
     findAll(user: User): Promise<Todo[]>;

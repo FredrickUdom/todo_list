@@ -22,12 +22,12 @@ let TodoService = class TodoService {
     constructor(todoRepo) {
         this.todoRepo = todoRepo;
     }
-    async createTodo(payload, userId) {
+    async createTodo(payload, user) {
         const todo = new todo_entity_1.Todo();
         todo.title = payload.title;
         todo.description = payload.description;
         todo.status = todo_enum_1.TodoStatus.OPEN;
-        todo.user = { id: userId };
+        todo.userId = user.id;
         return await this.todoRepo.save(todo);
     }
     async updateStatus(id, status) {
