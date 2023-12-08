@@ -19,7 +19,7 @@ export class TodoController {
     @Post()
     @UseGuards(AuthGuard(),RolesGuard)
     @Roles('admin','vendor')
-    async createTodo( @Body()payload, @UserDecorator()user:User){
+    async createTodo( @Body()payload:todoDto, @UserDecorator()user:User){
         
         return await this.todoService.createTodo( payload, user);
     }
@@ -48,4 +48,8 @@ export class TodoController {
     // async findALlTodo(@UserDecorator()user:User){
     //    return  await this.todoService.findAll(user)
     // }
+    @Get()
+    async findAll(@UserDecorator()user:User){
+        return await this.todoService.getAllTodo(user)
+    }
 }

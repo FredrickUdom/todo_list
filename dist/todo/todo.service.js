@@ -44,6 +44,16 @@ let TodoService = class TodoService {
         }
         await this.todoRepo.delete(id);
     }
+    async getAllTodo(user) {
+        const query = await this.todoRepo.createQueryBuilder('todo');
+        query.where(`todo.userId = :userId`, { userId: user.id });
+        try {
+            await query.getMany();
+        }
+        catch (error) {
+            throw new common_1.NotFoundException('no todo for this user');
+        }
+    }
 };
 exports.TodoService = TodoService;
 exports.TodoService = TodoService = __decorate([

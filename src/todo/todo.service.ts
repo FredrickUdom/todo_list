@@ -88,4 +88,15 @@ export class TodoService {
     //     }
         
     // }
+
+    async getAllTodo(user:User){
+        const query = await this.todoRepo.createQueryBuilder('todo');
+        query.where(`todo.userId = :userId`, {userId:user.id});
+
+        try {
+           await query.getMany();
+        } catch (error) {
+            throw new NotFoundException('no todo for this user')
+        }
+    }
 }

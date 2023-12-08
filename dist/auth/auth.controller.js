@@ -25,11 +25,10 @@ let AuthController = class AuthController {
         return await this.authService.signUp(payload);
     }
     async login(payload, res) {
-        const { token } = await this.authService.signIn(payload);
-        res.cookie('isAuthenticated', true, { maxAge: 2 * 60 * 60 * 100 });
+        const token = await this.authService.signIn(payload);
         res.cookie('Authenticated', token, {
             httpOnly: true,
-            maxAge: 2 * 60 * 60 * 100
+            maxAge: 1 * 60 * 60 * 24
         });
         return res.send({
             success: true,
