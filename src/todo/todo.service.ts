@@ -15,23 +15,20 @@ export class TodoService {
     constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<User>,@InjectRepository(User) private readonly userRepo: Repository<User>
     ){}
 
-    async createTodo(userId:number, payload:todoDto):Promise<Todo>{
-        const options: FindOneOptions<User> = {
-            where: { id: userId },
-          };
-      
-        const uniqueUser = await this.userRepo.findOne(options)
-        if(!uniqueUser){
-            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        }
+    async createTodo( payload:todoDto, user:User):Promise<Todo>{
+        try {
+        
             const todo = new Todo();
             todo.title = payload.title;
             todo.description = payload.description;
             todo.status = TodoStatus.OPEN;
-            todo.user = uniqueUser
+            todo.userId = user.id;
            
-
-            return await this.todoRepo.save(todo)
+           return await this.todoRepo.save(todo)
+    } catch (error) {
+        throw error
+    }
+          
         
         
 

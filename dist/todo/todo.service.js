@@ -24,20 +24,18 @@ let TodoService = class TodoService {
         this.todoRepo = todoRepo;
         this.userRepo = userRepo;
     }
-    async createTodo(userId, payload) {
-        const options = {
-            where: { id: userId },
-        };
-        const uniqueUser = await this.userRepo.findOne(options);
-        if (!uniqueUser) {
-            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
+    async createTodo(payload, user) {
+        try {
+            const todo = new todo_entity_1.Todo();
+            todo.title = payload.title;
+            todo.description = payload.description;
+            todo.status = todo_enum_1.TodoStatus.OPEN;
+            todo.userId = user.id;
+            return await this.todoRepo.save(todo);
         }
-        const todo = new todo_entity_1.Todo();
-        todo.title = payload.title;
-        todo.description = payload.description;
-        todo.status = todo_enum_1.TodoStatus.OPEN;
-        todo.user = uniqueUser;
-        return await this.todoRepo.save(todo);
+        catch (error) {
+            throw error;
+        }
     }
     async deleteTodo(id) {
         const findDelete = await this.todoRepo.findOneBy({ id });

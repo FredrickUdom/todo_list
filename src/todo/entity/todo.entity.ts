@@ -26,6 +26,7 @@ export class Todo{
 
    
 
-  
+    @Column()
+    userId:number
 
 }

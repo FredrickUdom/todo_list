@@ -17,14 +17,15 @@ const common_1 = require("@nestjs/common");
 const todo_service_1 = require("./todo.service");
 const passport_1 = require("@nestjs/passport");
 const user_decorator_1 = require("../auth/decorator/user.decorator");
+const user_entity_1 = require("./entity/user.entity");
 const role_guard_1 = require("../auth/guard/role.guard");
 const roles_1 = require("../auth/guard/roles");
 let TodoController = class TodoController {
     constructor(todoService) {
         this.todoService = todoService;
     }
-    async createTodo(payload, req) {
-        return await this.todoService.createTodo(payload, req);
+    async createTodo(payload, user) {
+        return await this.todoService.createTodo(payload, user);
     }
     async deleteTodo(id) {
         await this.todoService.deleteTodo(id);
@@ -41,7 +42,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, user_decorator_1.UserDecorator)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TodoController.prototype, "createTodo", null);
 __decorate([

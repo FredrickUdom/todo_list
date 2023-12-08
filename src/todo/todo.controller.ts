@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards, Req, Headers } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { Todo } from './entity/todo.entity';
 import {  todoDto } from '../dto/todo.dto';
@@ -19,9 +19,9 @@ export class TodoController {
     @Post()
     @UseGuards(AuthGuard(),RolesGuard)
     @Roles('admin','vendor')
-    async createTodo(@Body()payload, @UserDecorator() req){
+    async createTodo( @Body()payload, @UserDecorator()user:User){
         
-        return await this.todoService.createTodo(payload, req);
+        return await this.todoService.createTodo( payload, user);
     }
 
 

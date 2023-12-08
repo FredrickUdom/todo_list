@@ -14,6 +14,5 @@ export class todoDto{
     @IsString()
     status: TodoStatus;
 
-    @IsNotEmpty()
-    userId:number;
+ 
 }
