@@ -8,8 +8,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserDecorator } from '../auth/decorator/user.decorator';
 import { User } from './entity/user.entity';
 import { Request } from 'express';
-import { RolesGuard } from 'src/auth/guard/role.guard';
-import { Roles } from 'src/auth/guard/roles';
+import { RolesGuard } from '../auth/guard/role.guard';
+import { Roles } from '../auth/guard/roles';
 
 @Controller('todo')
 @UseGuards(AuthGuard())
