@@ -8,11 +8,10 @@ export declare class AuthService {
     private jwtService;
     constructor(userRepo: Repository<User>, jwtService: JwtService);
     signUp(payload: signupDto): Promise<any>;
-    signIn(payload: loginDto): Promise<{
-        token: string;
-    }>;
+    signIn(payload: loginDto): Promise<any>;
     findEmail(email: string): Promise<User>;
     user(headers: any): Promise<any>;
     updateUser(headers: any, updateUser: any): Promise<any>;
     findAllUser(): Promise<User[]>;
+    logout(): Promise<void>;
 }

@@ -67,6 +67,14 @@ let AuthService = class AuthService {
         }
         const jwtPayload = { id: user.id, userName: user.userName };
         const jwtToken = await this.jwtService.signAsync(jwtPayload);
+        res.cookie('Authenticated', token, {
+            httpOnly: true,
+            maxAge: 1 * 60 * 60 * 24
+        });
+        return res.send({
+            success: true,
+            userToken: token
+        });
         return { token: jwtToken };
     }
     async findEmail(email) {
@@ -116,6 +124,8 @@ let AuthService = class AuthService {
     }
     async findAllUser() {
         return await this.userRepo.find();
+    }
+    async logout() {
     }
 };
 exports.AuthService = AuthService;

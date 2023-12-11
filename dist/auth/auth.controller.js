@@ -27,16 +27,8 @@ let AuthController = class AuthController {
     async registration(payload) {
         return await this.authService.signUp(payload);
     }
-    async login(payload, res) {
+    async login(payload, req, res) {
         const token = await this.authService.signIn(payload);
-        res.cookie('Authenticated', token, {
-            httpOnly: true,
-            maxAge: 1 * 60 * 60 * 24
-        });
-        return res.send({
-            success: true,
-            userToken: token
-        });
     }
     async findUser() {
         return await this.authService.findAllUser();
@@ -53,9 +45,10 @@ __decorate([
 __decorate([
     (0, common_1.Post)('login'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Res)()),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [login_dto_1.loginDto, Object]),
+    __metadata("design:paramtypes", [login_dto_1.loginDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([

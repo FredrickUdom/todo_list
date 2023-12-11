@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { signupDto } from 'src/dto/signup.dto';
 import { User } from '../todo/entity/user.entity';
 import { loginDto } from 'src/dto/login.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from './guard/role.guard';
 import { Roles } from './guard/roles';
@@ -18,19 +18,11 @@ export class AuthController {
     }
 
     @Post('login')
-    async login(@Body()payload:loginDto, @Res()res:Response){
+    async login(@Body()payload:loginDto, @Req()req:Request, @Res()res:Response){
 
         const token = await this.authService.signIn(payload);
         // res.cookie('isAuthenticated', true, {maxAge: 2 * 60 * 60 * 100});
-        res.cookie('Authenticated', token, {
-            httpOnly: true,
-            maxAge: 1 * 60 * 60 * 24
-        });
-        return res.send({
-            success: true,
-            userToken: token
-        
-        })
+
         // return await this.authService.signIn(payload);
     }
 
