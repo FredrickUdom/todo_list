@@ -29,6 +29,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../todo/entity/user.entity");
 const typeorm_2 = require("typeorm");
 const bcrypt = require("bcrypt");
+const login_dto_1 = require("../dto/login.dto");
 const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
     constructor(userRepo, jwtService) {
@@ -56,7 +57,7 @@ let AuthService = class AuthService {
             return err;
         }
     }
-    async signIn(payload) {
+    async signIn(payload, req, res) {
         const { email, password } = payload;
         const user = await this.userRepo.findOne({ where: { email: email } });
         if (!user) {
@@ -66,8 +67,8 @@ let AuthService = class AuthService {
             throw new common_1.HttpException('sorry password not exist', 400);
         }
         const jwtPayload = { id: user.id, userName: user.userName };
-        const jwtToken = await this.jwtService.signAsync(jwtPayload);
-        res.cookie('Authenticated', token, {
+        const token = await this.jwtService.signAsync(jwtPayload);
+        res.cookie('isAuthenticated', token, {
             httpOnly: true,
             maxAge: 1 * 60 * 60 * 24
         });
@@ -75,7 +76,14 @@ let AuthService = class AuthService {
             success: true,
             userToken: token
         });
-        return { token: jwtToken };
+    }
+    async logout(req, res) {
+        const clearCookie = res.clearCookie('isAuthenticated');
+        const response = res.send(` user successfully logout`);
+        return {
+            clearCookie,
+            response
+        };
     }
     async findEmail(email) {
         const mail = await this.userRepo.findOneByOrFail({ email });
@@ -125,10 +133,22 @@ let AuthService = class AuthService {
     async findAllUser() {
         return await this.userRepo.find();
     }
-    async logout() {
-    }
 };
 exports.AuthService = AuthService;
+__decorate([
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [login_dto_1.loginDto, Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthService.prototype, "signIn", null);
+__decorate([
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthService.prototype, "logout", null);
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),

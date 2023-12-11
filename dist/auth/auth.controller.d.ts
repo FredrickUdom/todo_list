@@ -8,5 +8,9 @@ export declare class AuthController {
     constructor(authService: AuthService);
     registration(payload: signupDto): Promise<any>;
     login(payload: loginDto, req: Request, res: Response): Promise<void>;
+    logout(req: Request, res: Response): Promise<{
+        clearCookie: Response<any, Record<string, any>>;
+        response: Response<any, Record<string, any>>;
+    }>;
     findUser(): Promise<User[]>;
 }

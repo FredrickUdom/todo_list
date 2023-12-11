@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../todo/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { signupDto } from '../dto/signup.dto';
 import { loginDto } from 'src/dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Request, Response } from 'express';
 import { jwtConstant } from 'src/todo/constant/constant';
 
 @Injectable()
@@ -36,7 +37,7 @@ export class AuthService {
     }
 
 
-    async signIn(payload:loginDto){
+    async signIn(payload:loginDto, @Req()req:Request, @Res()res:Response){
         const {email, password}=payload;
 
         const user = await this.userRepo.findOne({where:{email:email}});
@@ -49,9 +50,9 @@ export class AuthService {
         }
 
         const jwtPayload = {id:user.id, userName:user.userName}
-        const jwtToken = await this.jwtService.signAsync(jwtPayload);
+        const token = await this.jwtService.signAsync(jwtPayload);
 
-        res.cookie('Authenticated', token, {
+        res.cookie('isAuthenticated', token, {
             httpOnly: true,
             maxAge: 1 * 60 * 60 * 24
         });
@@ -60,8 +61,20 @@ export class AuthService {
             userToken: token
         
         })
-        return {token: jwtToken};
+       
     }
+
+    async logout(@Req()req:Request, @Res()res:Response){
+        const clearCookie = res.clearCookie('isAuthenticated');
+        
+        const response = res.send(` user successfully logout`)
+
+        return {
+            clearCookie,
+            response
+        }
+    }
+
 
     async findEmail(email:string){
         const mail = await this.userRepo.findOneByOrFail({email})
@@ -122,7 +135,5 @@ export class AuthService {
         return await this.userRepo.find()
     }
 
-    async logout(){
 
-    }
 }
