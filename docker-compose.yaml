@@ -12,8 +12,8 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
 
-  mysql:
-    image: mysql:5.7
+  postgres:
+    image: postgres:14
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
