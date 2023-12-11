@@ -1,10 +1,10 @@
 FROM node:18-alpine
 
-WORKDIR usr/app/todo_app
+WORKDIR /usr/app/todo_app
 
 COPY package*.json .
 
-COPY package*.json .
+COPY . .
 
 RUN npm install --only=production
 
