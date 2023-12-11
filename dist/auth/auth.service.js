@@ -114,6 +114,9 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Invalid or missing Bearer token');
         }
     }
+    async findAllUser() {
+        return await this.userRepo.find();
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([

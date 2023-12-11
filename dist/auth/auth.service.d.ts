@@ -14,4 +14,5 @@ export declare class AuthService {
     findEmail(email: string): Promise<User>;
     user(headers: any): Promise<any>;
     updateUser(headers: any, updateUser: any): Promise<any>;
+    findAllUser(): Promise<User[]>;
 }

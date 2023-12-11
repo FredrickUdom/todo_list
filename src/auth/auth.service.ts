@@ -108,4 +108,8 @@ export class AuthService {
             throw new UnauthorizedException('Invalid or missing Bearer token');
         }
     }
+
+    async findAllUser(){
+        return await this.userRepo.find()
+    }
 }

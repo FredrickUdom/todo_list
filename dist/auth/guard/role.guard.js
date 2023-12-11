@@ -21,7 +21,6 @@ let RolesGuard = class RolesGuard {
     }
     async canActivate(context) {
         const roles = this.reflector.get('roles', context.getHandler());
-        console.log('roles', roles);
         const request = context.switchToHttp().getRequest();
         if (request === null || request === void 0 ? void 0 : request.user) {
             const headers = request.headers;

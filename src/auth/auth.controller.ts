@@ -1,9 +1,12 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { signupDto } from 'src/dto/signup.dto';
 import { User } from '../todo/entity/user.entity';
 import { loginDto } from 'src/dto/login.dto';
 import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from './guard/role.guard';
+import { Roles } from './guard/roles';
 
 @Controller('auth')
 export class AuthController {
@@ -29,5 +32,12 @@ export class AuthController {
         
         })
         // return await this.authService.signIn(payload);
+    }
+
+    @Get()
+    @UseGuards(AuthGuard(),RolesGuard)
+    @Roles('admin','vendor')
+    async findUser(){
+        return await this.authService.findAllUser()
     }
 }
