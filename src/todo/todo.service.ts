@@ -74,7 +74,7 @@ export class TodoService {
     }
 
     // async findAll(user:User):Promise<Todo[]>{
-    // //    return await this.todoRepo.find()
+    // //    return await this.todoRepo.find({ relations:{}})
     //     const query = await this.todoRepo.createQueryBuilder('todo');
 
     //     query.where(`todo.userId = :userId`,{userId:user.id})
