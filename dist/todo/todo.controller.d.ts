@@ -5,7 +5,7 @@ import { User } from './entity/user.entity';
 export declare class TodoController {
     private readonly todoService;
     constructor(todoService: TodoService);
-    createTodo(payload: todoDto, user: User): Promise<Todo>;
+    createTodo(payload: todoDto, user: User): Promise<Todo & User>;
     deleteTodo(id: any): Promise<{
         message: string;
     }>;

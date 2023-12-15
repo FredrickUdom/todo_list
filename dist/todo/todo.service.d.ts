@@ -6,7 +6,7 @@ export declare class TodoService {
     private readonly todoRepo;
     private readonly userRepo;
     constructor(todoRepo: Repository<User>, userRepo: Repository<User>);
-    createTodo(payload: todoDto, user: User): Promise<Todo>;
+    createTodo(payload: todoDto, user: User): Promise<Todo & User>;
     deleteTodo(id: number): Promise<void>;
     getAllTodo(user: User): Promise<void>;
 }

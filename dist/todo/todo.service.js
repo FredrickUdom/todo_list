@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const todo_entity_1 = require("./entity/todo.entity");
 const typeorm_2 = require("typeorm");
-const todo_enum_1 = require("./enum/todo.enum");
 const user_entity_1 = require("./entity/user.entity");
 let TodoService = class TodoService {
     constructor(todoRepo, userRepo) {
@@ -25,17 +24,11 @@ let TodoService = class TodoService {
         this.userRepo = userRepo;
     }
     async createTodo(payload, user) {
-        try {
-            const todo = new todo_entity_1.Todo();
-            todo.title = payload.title;
-            todo.description = payload.description;
-            todo.status = todo_enum_1.TodoStatus.OPEN;
-            todo.userId = user.id;
-            return await this.todoRepo.save(todo);
-        }
-        catch (error) {
-            throw error;
-        }
+        const post = new todo_entity_1.Todo();
+        post.title = payload.title;
+        post.description = payload.description;
+        post.user = user;
+        return await this.todoRepo.save(post);
     }
     async deleteTodo(id) {
         const findDelete = await this.todoRepo.findOneBy({ id });

@@ -2,12 +2,12 @@ import { HttpException, HttpStatus, Injectable, NotFoundException, Req, Request 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from './entity/todo.entity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-
+import { v4 as uuid } from 'uuid';
 import { TodoStatus } from './enum/todo.enum';
 import { todoDto } from '../dto/todo.dto';
 import { User } from './entity/user.entity';
-import { log } from 'console';
-import { UserDecorator } from 'src/auth/decorator/user.decorator';
+
+
 // import { Request } from 'express';
 
 @Injectable()
@@ -15,50 +15,12 @@ export class TodoService {
     constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<User>,@InjectRepository(User) private readonly userRepo: Repository<User>
     ){}
 
-    async createTodo( payload:todoDto, user:User):Promise<Todo>{
-        try {
+    async createTodo(userId){
         
-            const todo = new Todo();
-            todo.title = payload.title;
-            todo.description = payload.description;
-            todo.status = TodoStatus.OPEN;
-            todo.userId = user.id;
-           
-           return await this.todoRepo.save(todo)
-    } catch (error) {
-        throw error
-    }
-          
-        
-        
-
-      
-
-      
-    //    Object.assign(todo, payload)
-
-   
-    // users.id = todo.userId;
-    // todo.user = user;
-    // Object.assign(todo, users)
-
-    // console.log(todo.userId);
-
-    //    const todo = await this.todoRepo.create({
-    //     ...payload,
-    //     user: user.id
-    //    });
-
-    //    if(!todo){
-    //     throw new HttpException('sorry not found', 400)
-    //    }
-
-    //    console.log(user.id)
-
-    // const todoPost = await this.todoRepo.create(todo)
-        
+        const users = await this.userRepo.findOneBy({id:userId})
     }
 
+    
     // async updateStatus(id: number, status:TodoStatus){
     //     await this.todoRepo.update({id}, {status})
     //    return this.todoRepo.findOneBy({id})

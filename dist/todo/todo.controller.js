@@ -42,7 +42,7 @@ exports.TodoController = TodoController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), role_guard_1.RolesGuard),
-    (0, roles_1.Roles)('admin', 'vendor'),
+    (0, roles_1.Roles)('admin', 'unknown'),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, user_decorator_1.UserDecorator)()),
     __metadata("design:type", Function),

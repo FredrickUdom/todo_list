@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "created_At", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => todo_entity_1.Todo, (todo) => todo.user),
+    (0, typeorm_1.OneToMany)(() => todo_entity_1.Todo, (todo) => todo.user, { eager: true }),
     __metadata("design:type", Array)
 ], User.prototype, "todo", void 0);
 exports.User = User = __decorate([

@@ -18,7 +18,7 @@ export class TodoController {
 
     @Post()
     @UseGuards(AuthGuard(),RolesGuard)
-    @Roles('admin','vendor')
+    @Roles('admin','unknown')
     async createTodo( @Body()payload:todoDto, @UserDecorator()user:User){
         
         return await this.todoService.createTodo( payload, user);
