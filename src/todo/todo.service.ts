@@ -15,9 +15,13 @@ export class TodoService {
     constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<User>,@InjectRepository(User) private readonly userRepo: Repository<User>
     ){}
 
-    async createTodo(userId){
+    async createTodo(payload:todoDto, @Req()userId ){
         
-        const users = await this.userRepo.findOneBy({id:userId})
+        const users = await this.userRepo.findOneBy({id:userId});
+        const todo = new Todo();
+        todo.title =payload.title;
+        todo.description = payload.description;
+        todo.user = users
     }
 
     

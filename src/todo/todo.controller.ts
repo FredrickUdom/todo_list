@@ -21,7 +21,7 @@ export class TodoController {
     @Roles('admin','unknown')
     async createTodo( @Body()payload:todoDto, @UserDecorator()user:User){
         
-        return await this.todoService.createTodo( payload, user);
+        return await this.todoService.createTodo(payload, user);
     }
 
 
