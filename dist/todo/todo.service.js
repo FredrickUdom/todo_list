@@ -17,19 +17,24 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const todo_entity_1 = require("./entity/todo.entity");
 const typeorm_2 = require("typeorm");
-const todo_dto_1 = require("../dto/todo.dto");
 const user_entity_1 = require("./entity/user.entity");
 let TodoService = class TodoService {
     constructor(todoRepo, userRepo) {
         this.todoRepo = todoRepo;
         this.userRepo = userRepo;
     }
-    async createTodo(payload, userId) {
-        const users = await this.userRepo.findOneBy({ id: userId });
-        const todo = new todo_entity_1.Todo();
-        todo.title = payload.title;
-        todo.description = payload.description;
-        todo.user = users;
+    async handleRequest(req, next) {
+        const userId = req.user.id;
+        req.userId = userId;
+        next();
+    }
+    async createTodo(request) {
+        const id = request.id;
+        const post = new todo_entity_1.Todo();
+        post.title = request.title,
+            post.description = request.description;
+        post.userId = id;
+        await this.todoRepo.save(post);
     }
     async deleteTodo(id) {
         const findDelete = await this.todoRepo.findOneBy({ id });
@@ -51,9 +56,9 @@ let TodoService = class TodoService {
 };
 exports.TodoService = TodoService;
 __decorate([
-    __param(1, (0, common_1.Req)()),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [todo_dto_1.todoDto, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TodoService.prototype, "createTodo", null);
 exports.TodoService = TodoService = __decorate([

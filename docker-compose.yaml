@@ -5,19 +5,22 @@ services:
     build: .
     ports:
       - "3000:3000"
+  postgres_db:
+    image: postgres
+    ports:
+      -"5432:5432"
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
+      - DB_HOST=localhost
+      - DB_USER=mytodo
+      - DB_PASSWORD=todopassword
+      - DB_NAME=todo
 
   postgres:
     image: postgres:14
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME}
+      - MYPOSGRES_ROOT_PASSWORD=todopassword
+      - MYPOSTGRES_DATABASE=todo
     volumes:
       - mysql_data:/var/lib/mysql
 

@@ -15,16 +15,25 @@ export class TodoService {
     constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<User>,@InjectRepository(User) private readonly userRepo: Repository<User>
     ){}
 
-    async createTodo(payload:todoDto, @Req()userId ){
-        
-        const users = await this.userRepo.findOneBy({id:userId});
-        const todo = new Todo();
-        todo.title =payload.title;
-        todo.description = payload.description;
-        todo.user = users
-    }
+    ///
 
-    
+    async handleRequest(req: any, next: Function) {
+        const userId = req.user.id; // Extract user ID from request object (e.g., JWT token)
+        req.userId = userId; // Add user ID to request object for further access
+        next(); // Proceed with request handler
+      }
+
+    ///
+
+    async createTodo(@Req() request: {id:number, userId:number, title:string, description:string}) {
+        const id = request.id; // Access user ID from request object set by middleware
+        const post = new Todo(); // Set user ID in post object
+         post.title = request.title,
+         post.description = request.description;
+         post.userId = id;
+        await this.todoRepo.save(post); // Save post with included user ID
+
+    }
     // async updateStatus(id: number, status:TodoStatus){
     //     await this.todoRepo.update({id}, {status})
     //    return this.todoRepo.findOneBy({id})
