@@ -21,12 +21,20 @@ export class Todo{
     @CreateDateColumn()
     created_At: Date;
 
-    @ManyToOne(() => User, (user) => user.todo)
+    @Column()
+    userId:number
+
+    @ManyToOne(() => User, (user) => user.todo, {
+        eager: true
+    })
+    @JoinColumn({
+        name: 'userId',
+        referencedColumnName: 'id'
+    })
     user: User;
 
    
 
-    @Column()
-    userId:number
+ 
 
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards, Req, Headers } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards, Headers, Req, Query } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { Todo } from './entity/todo.entity';
 import {  todoDto } from '../dto/todo.dto';
@@ -12,16 +12,16 @@ import { RolesGuard } from '../auth/guard/role.guard';
 import { Roles } from '../auth/guard/roles';
 
 @Controller('todo')
-@UseGuards(AuthGuard())
+// @UseGuards(AuthGuard())
 export class TodoController {
     constructor(private readonly todoService:TodoService){}
 
     @Post()
     @UseGuards(AuthGuard(),RolesGuard)
     @Roles('admin','unknown')
-    async createTodo( @Body()payload:any){
+    async createTodo( @Body()payload:todoDto, @Req()req:Request){
         
-        return await this.todoService.createTodo(payload);
+        return await this.todoService.createTodo(payload, req.user as User);
     }
 
 
@@ -44,10 +44,13 @@ export class TodoController {
     }
 }
 
-    // @Get()
-    // async findALlTodo(@UserDecorator()user:User){
-    //    return  await this.todoService.findAll(user)
-    // }
+//
+    @Get()
+    async findALlTodo(@Query()query:any){
+       return  await this.todoService.findAll(query)
+    }
+//
+
     @Get()
     async findAll(@UserDecorator()user:User){
         return await this.todoService.getAllTodo(user)

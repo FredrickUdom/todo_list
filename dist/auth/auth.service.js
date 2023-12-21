@@ -59,15 +59,19 @@ let AuthService = class AuthService {
     }
     async signIn(payload, req, res) {
         const { email, password } = payload;
-        const user = await this.userRepo.findOne({ where: { email: email } });
+        const user = await this.userRepo.createQueryBuilder("user")
+            .addSelect("user.password")
+            .where("user.email = :email", { email: payload.email }).getOne();
         if (!user) {
             throw new common_1.HttpException('No email found', 400);
         }
         if (!await bcrypt.compare(password, user.password)) {
             throw new common_1.HttpException('sorry password not exist', 400);
         }
-        const jwtPayload = { id: user.id, userName: user.userName };
-        const token = await this.jwtService.signAsync(jwtPayload);
+        const token = await this.jwtService.signAsync({
+            email: user.email,
+            id: user.id
+        });
         res.cookie('isAuthenticated', token, {
             httpOnly: true,
             maxAge: 1 * 60 * 60 * 24

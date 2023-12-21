@@ -6,6 +6,6 @@ export declare class Todo {
     description: string;
     status: TodoStatus;
     created_At: Date;
-    user: User;
     userId: number;
+    user: User;
 }

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TodoController = void 0;
 const common_1 = require("@nestjs/common");
 const todo_service_1 = require("./todo.service");
+const todo_dto_1 = require("../dto/todo.dto");
 const passport_1 = require("@nestjs/passport");
 const user_decorator_1 = require("../auth/decorator/user.decorator");
 const user_entity_1 = require("./entity/user.entity");
@@ -24,14 +25,17 @@ let TodoController = class TodoController {
     constructor(todoService) {
         this.todoService = todoService;
     }
-    async createTodo(payload) {
-        return await this.todoService.createTodo(payload);
+    async createTodo(payload, req) {
+        return await this.todoService.createTodo(payload, req.user);
     }
     async deleteTodo(id) {
         await this.todoService.deleteTodo(id);
         return {
             message: 'deleted successfully'
         };
+    }
+    async findALlTodo(query) {
+        return await this.todoService.findAll(query);
     }
     async findAll(user) {
         return await this.todoService.getAllTodo(user);
@@ -43,8 +47,9 @@ __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), role_guard_1.RolesGuard),
     (0, roles_1.Roles)('admin', 'unknown'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [todo_dto_1.todoDto, Object]),
     __metadata("design:returntype", Promise)
 ], TodoController.prototype, "createTodo", null);
 __decorate([
@@ -56,6 +61,13 @@ __decorate([
 ], TodoController.prototype, "deleteTodo", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], TodoController.prototype, "findALlTodo", null);
+__decorate([
+    (0, common_1.Get)(),
     __param(0, (0, user_decorator_1.UserDecorator)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_entity_1.User]),
@@ -63,7 +75,6 @@ __decorate([
 ], TodoController.prototype, "findAll", null);
 exports.TodoController = TodoController = __decorate([
     (0, common_1.Controller)('todo'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)()),
     __metadata("design:paramtypes", [todo_service_1.TodoService])
 ], TodoController);
 //# sourceMappingURL=todo.controller.js.map

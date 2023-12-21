@@ -23,18 +23,12 @@ let TodoService = class TodoService {
         this.todoRepo = todoRepo;
         this.userRepo = userRepo;
     }
-    async handleRequest(req, next) {
-        const userId = req.user.id;
-        req.userId = userId;
-        next();
-    }
-    async createTodo(request) {
-        const id = request.id;
-        const post = new todo_entity_1.Todo();
-        post.title = request.title,
-            post.description = request.description;
-        post.userId = id;
-        await this.todoRepo.save(post);
+    async createTodo(payload, user) {
+        const todo = new todo_entity_1.Todo();
+        todo.userId = user.id;
+        Object.assign(todo, payload);
+        this.todoRepo.create(todo);
+        return await this.todoRepo.save(todo);
     }
     async deleteTodo(id) {
         const findDelete = await this.todoRepo.findOneBy({ id });
@@ -42,6 +36,26 @@ let TodoService = class TodoService {
             throw new common_1.HttpException('no such id to delete', 404);
         }
         await this.todoRepo.delete(id);
+    }
+    async findAll(query) {
+        const myQuery = this.todoRepo.createQueryBuilder("todo")
+            .leftJoinAndSelect('todo.user', "user");
+        if (!(Object.keys(query).length === 0) && query.constructor === Object) {
+            const queryKey = Object.keys(query);
+            if (queryKey.includes('title')) {
+                myQuery.where('todo.title LIKE :title', { title: `%${query['title']}%` });
+            }
+            if (queryKey.includes("sort")) {
+                myQuery.orderBy("todo.title", query["sort"].toUpperCase());
+            }
+            if (queryKey.includes("todo")) {
+                myQuery.andWhere("todo.title = :todos", { todos: query["todo"] });
+            }
+            return await myQuery.getMany();
+        }
+        else {
+            return await myQuery.getMany();
+        }
     }
     async getAllTodo(user) {
         const query = await this.todoRepo.createQueryBuilder('todo');
@@ -55,12 +69,6 @@ let TodoService = class TodoService {
     }
 };
 exports.TodoService = TodoService;
-__decorate([
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], TodoService.prototype, "createTodo", null);
 exports.TodoService = TodoService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(todo_entity_1.Todo)),

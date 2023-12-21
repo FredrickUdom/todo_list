@@ -27,7 +27,7 @@ export class User{
     @CreateDateColumn()
     created_At: Date;
 
-    @OneToMany(() => Todo, (todo) => todo.user, {eager:true})
+    @OneToMany(() => Todo, (todo) => todo.user)
     todo:Todo[];
     
  

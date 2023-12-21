@@ -17,22 +17,12 @@ export class TodoService {
 
     ///
 
-    async handleRequest(req: any, next: Function) {
-        const userId = req.user.id; // Extract user ID from request object (e.g., JWT token)
-        req.userId = userId; // Add user ID to request object for further access
-        next(); // Proceed with request handler
-      }
-
-    ///
-
-    async createTodo(@Req() request: {id:number, userId:number, title:string, description:string}) {
-        const id = request.id; // Access user ID from request object set by middleware
-        const post = new Todo(); // Set user ID in post object
-         post.title = request.title,
-         post.description = request.description;
-         post.userId = id;
-        await this.todoRepo.save(post); // Save post with included user ID
-
+    async createTodo(payload:todoDto, user:User){
+        const todo = new Todo();
+        todo.userId = user.id;
+        Object.assign(todo, payload);
+        this.todoRepo.create(todo);
+        return await this.todoRepo.save(todo)
     }
     // async updateStatus(id: number, status:TodoStatus){
     //     await this.todoRepo.update({id}, {status})
@@ -46,6 +36,39 @@ export class TodoService {
             throw new HttpException('no such id to delete', 404)
         }
         await this.todoRepo.delete(id)
+    }
+
+    async findAll(query?:string){
+        const myQuery = this.todoRepo.createQueryBuilder("todo")
+        .leftJoinAndSelect('todo.user', "user")
+        // .getMany()
+        
+        // check if the query is present or not
+        if(!(Object.keys(query).length === 0) && query.constructor === Object){
+
+            const queryKey = Object.keys(query); //get the keys of the query string
+
+            // check if the title is present or not
+            if(queryKey.includes('title')){
+                myQuery.where('todo.title LIKE :title', {title: `%${query['title']}%`});
+
+            }
+
+            // check if the sort is present we will sort by title field only
+            if(queryKey.includes("sort")){
+                myQuery.orderBy("todo.title", query["sort"].toUpperCase()) // ASC   DESC
+            }
+
+            // check if todo is present, show only selected todo  items
+            if(queryKey.includes("todo")){
+                myQuery.andWhere("todo.title = :todos", {todos:query["todo"]})
+            }
+            return await myQuery.getMany()
+        }
+        else{
+            return await myQuery.getMany()
+        }
+
     }
 
     // async findAll(user:User):Promise<Todo[]>{

@@ -40,7 +40,10 @@ export class AuthService {
     async signIn(payload:loginDto, @Req()req:Request, @Res()res:Response){
         const {email, password}=payload;
 
-        const user = await this.userRepo.findOne({where:{email:email}});
+        // const user = await this.userRepo.findOne({where:{email:email}});
+        const user = await this.userRepo.createQueryBuilder("user")
+        .addSelect("user.password")
+        .where("user.email = :email", {email:payload.email}).getOne()
         if(!user){
             throw new HttpException('No email found', 400)
         }
@@ -49,8 +52,11 @@ export class AuthService {
             throw new HttpException('sorry password not exist', 400)
         }
 
-        const jwtPayload = {id:user.id, userName:user.userName}
-        const token = await this.jwtService.signAsync(jwtPayload);
+        // const jwtPayload = {id:user.id, userName:user.userName}
+        const token = await this.jwtService.signAsync({
+            email: user.email,
+            id: user.id
+        });
 
         res.cookie('isAuthenticated', token, {
             httpOnly: true,
