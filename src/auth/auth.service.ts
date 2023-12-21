@@ -57,11 +57,13 @@ export class AuthService {
             email: user.email,
             id: user.id
         });
+        
 
         res.cookie('isAuthenticated', token, {
             httpOnly: true,
-            maxAge: 1 * 60 * 60 * 24
+            maxAge: 1 * 60 * 60 * 1000
         });
+        delete user.password
         return res.send({
             success: true,
             userToken: token
