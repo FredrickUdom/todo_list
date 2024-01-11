@@ -14,8 +14,8 @@ export class AuthService {
     constructor(@InjectRepository(User) private userRepo:Repository<User>, private jwtService:JwtService){}
 
     async signUp(payload:signupDto){
-        const { email, password, ...rest}= payload;
         payload.email = payload.email.toLowerCase()
+        const { email, password, ...rest}= payload;
         const userEmail = await this.userRepo.findOne({where:{email:email}});
         if(userEmail){
             throw new HttpException('sorry email already exist', 400);
