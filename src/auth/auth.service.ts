@@ -15,6 +15,7 @@ export class AuthService {
 
     async signUp(payload:signupDto){
         const { email, password, ...rest}= payload;
+        payload.email = payload.email.toLowerCase()
         const userEmail = await this.userRepo.findOne({where:{email:email}});
         if(userEmail){
             throw new HttpException('sorry email already exist', 400);
@@ -23,7 +24,7 @@ export class AuthService {
         const hashPassword = await bcrypt.hash(password, 10)
 
         try {
-            const user = await this.userRepo.save({email, password:hashPassword, ...rest})
+            const user = await this.userRepo.create({email, password:hashPassword, ...rest})
             await this.userRepo.save(user);
            delete user.password;
            return user;
@@ -40,7 +41,7 @@ export class AuthService {
     async signIn(payload:loginDto, @Req()req:Request, @Res()res:Response){
         const {email, password}=payload;
 
-        // const user = await this.userRepo.findOne({where:{email:email}});
+       ;
         const user = await this.userRepo.createQueryBuilder("user")
         .addSelect("user.password")
         .where("user.email = :email", {email:payload.email}).getOne()
@@ -51,8 +52,6 @@ export class AuthService {
         if(!await bcrypt.compare(password, user.password)){
             throw new HttpException('sorry password not exist', 400)
         }
-
-        // const jwtPayload = {id:user.id, userName:user.userName}
         const token = await this.jwtService.signAsync({
             email: user.email,
             id: user.id
@@ -63,7 +62,7 @@ export class AuthService {
             httpOnly: true,
             maxAge: 1 * 60 * 60 * 1000
         });
-        delete user.password
+        // delete user.password
         return res.send({
             success: true,
             userToken: token

@@ -12,7 +12,9 @@ import { User } from './entity/user.entity';
 
 @Injectable()
 export class TodoService {
-    constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<User>,@InjectRepository(User) private readonly userRepo: Repository<User>
+    constructor(@InjectRepository(Todo) private readonly todoRepo: Repository<Todo>,
+    
+    // @InjectRepository(User) private readonly userRepo: Repository<User>
     ){}
 
     ///
@@ -41,24 +43,20 @@ export class TodoService {
     async findAll(query?:string){
         const myQuery = this.todoRepo.createQueryBuilder("todo")
         .leftJoinAndSelect('todo.user', "user")
-        // .getMany()
-        
+        // .getMany()    
         // check if the query is present or not
         if(!(Object.keys(query).length === 0) && query.constructor === Object){
 
             const queryKey = Object.keys(query); //get the keys of the query string
-
             // check if the title is present or not
             if(queryKey.includes('title')){
                 myQuery.where('todo.title LIKE :title', {title: `%${query['title']}%`});
 
             }
-
             // check if the sort is present we will sort by title field only
             if(queryKey.includes("sort")){
                 myQuery.orderBy("todo.title", query["sort"].toUpperCase()) // ASC   DESC
             }
-
             // check if todo is present, show only selected todo  items
             if(queryKey.includes("todo")){
                 myQuery.andWhere("todo.title = :todos", {todos:query["todo"]})
