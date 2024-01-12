@@ -4,10 +4,10 @@ import { User } from '../todo/entity/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { signupDto } from '../dto/signup.dto';
-import { loginDto } from 'src/dto/login.dto';
+import { loginDto } from '../dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
-import { jwtConstant } from 'src/todo/constant/constant';
+
 
 @Injectable()
 export class AuthService {
