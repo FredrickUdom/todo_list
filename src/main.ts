@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-// import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
+import * as passport from "passport"
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const port = process.env.PROJECT_PORT || 5000;
@@ -12,8 +14,20 @@ async function bootstrap() {
 
   app.enableCors({
     origin: 'http://localhost:3000'
-  })
-  // app.use(cookieParser());
+  });
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+    })
+  )
+  app.use(passport.initialize())
+  app.use(passport.session())
+
+
+  app.use(cookieParser());
   app.setGlobalPrefix('api/v1')
   await app.listen(port, () => console.log(`server is running on port: ${port}`));
 }
