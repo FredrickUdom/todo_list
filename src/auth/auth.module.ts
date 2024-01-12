@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { SessionSerializer } from './session/session.serializer';
 
 @Module({
   imports:[
@@ -24,13 +25,14 @@ import { JwtStrategy } from './strategy/jwt.strategy';
       inject: [ConfigService],
     }),
     PassportModule.register({
-      defaultStrategy: 'jwt'
+      defaultStrategy: 'jwt',
+      session: true
     }),
 
     
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports:[JwtStrategy, PassportModule,AuthService]
+  providers: [AuthService, JwtStrategy, SessionSerializer],
+  exports:[JwtStrategy, PassportModule,AuthService, SessionSerializer]
 })
 export class AuthModule {}
