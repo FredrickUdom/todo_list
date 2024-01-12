@@ -41,7 +41,6 @@ export class AuthService {
     async signIn(payload:loginDto, @Req()req:Request, @Res()res:Response){
         const {email, password}=payload;
 
-       ;
         const user = await this.userRepo.createQueryBuilder("user")
         .addSelect("user.password")
         .where("user.email = :email", {email:payload.email}).getOne()
@@ -57,7 +56,6 @@ export class AuthService {
             id: user.id
         });
         
-
         res.cookie('isAuthenticated', token, {
             httpOnly: true,
             maxAge: 1 * 60 * 60 * 1000
@@ -67,8 +65,7 @@ export class AuthService {
             success: true,
             userToken: token
         
-        })
-       
+        })   
     }
 
     async logout(@Req()req:Request, @Res()res:Response){

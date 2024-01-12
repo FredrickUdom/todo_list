@@ -21,9 +21,6 @@ export class AuthController {
     async login(@Body()payload:loginDto, @Req()req:Request, @Res()res:Response){
 
         const token = await this.authService.signIn(payload, req, res);
-        // res.cookie('isAuthenticated', true, {maxAge: 2 * 60 * 60 * 100});
-
-        // return await this.authService.signIn(payload);
     }
 
     @HttpCode(200)
