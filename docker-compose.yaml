@@ -1,25 +1,27 @@
-version: "3.8"
+version: '3.8'
 
 services:
   app:
     build: .
     ports:
       - "3000:3000"
+    depends_on:
+      - db
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-
-  postgres:
-    image: postgres:14
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: mytodo
+      DB_PASSWORD: todopassword
+      DB_NAME: todo
+  db:
+    image: todo-app
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME}
+      DB_USER: mytodo
+      DB_PASSWORD: todopassword
+      DB_NAME: todo
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  mysql_data:
+  postgres-data:

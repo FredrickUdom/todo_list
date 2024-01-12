@@ -1,7 +1,6 @@
 import { AuthService } from './auth.service';
-import { signupDto } from 'src/dto/signup.dto';
-import { User } from '../todo/entity/user.entity';
-import { loginDto } from 'src/dto/login.dto';
+import { signupDto } from '../dto/signup.dto';
+import { loginDto } from '../dto/login.dto';
 import { Request, Response } from 'express';
 export declare class AuthController {
     private authService;
@@ -12,5 +11,5 @@ export declare class AuthController {
         clearCookie: Response<any, Record<string, any>>;
         response: Response<any, Record<string, any>>;
     }>;
-    findUser(): Promise<User[]>;
+    findUser(): Promise<import("../todo/entity/user.entity").User[]>;
 }

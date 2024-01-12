@@ -6,10 +6,10 @@ import { Request } from 'express';
 export declare class TodoController {
     private readonly todoService;
     constructor(todoService: TodoService);
-    createTodo(payload: todoDto, req: Request): Promise<Todo & User>;
+    createTodo(payload: todoDto, req: Request): Promise<Todo>;
     deleteTodo(id: any): Promise<{
         message: string;
     }>;
-    findALlTodo(query: any): Promise<User[]>;
+    findALlTodo(query: any): Promise<Todo[]>;
     findAll(user: User): Promise<void>;
 }

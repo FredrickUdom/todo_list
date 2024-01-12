@@ -4,10 +4,9 @@ import { todoDto } from '../dto/todo.dto';
 import { User } from './entity/user.entity';
 export declare class TodoService {
     private readonly todoRepo;
-    private readonly userRepo;
-    constructor(todoRepo: Repository<User>, userRepo: Repository<User>);
-    createTodo(payload: todoDto, user: User): Promise<Todo & User>;
+    constructor(todoRepo: Repository<Todo>);
+    createTodo(payload: todoDto, user: User): Promise<Todo>;
     deleteTodo(id: number): Promise<void>;
-    findAll(query?: string): Promise<User[]>;
+    findAll(query?: string): Promise<Todo[]>;
     getAllTodo(user: User): Promise<void>;
 }

@@ -37,6 +37,7 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
     }
     async signUp(payload) {
+        payload.email = payload.email.toLowerCase();
         const { email, password } = payload, rest = __rest(payload, ["email", "password"]);
         const userEmail = await this.userRepo.findOne({ where: { email: email } });
         if (userEmail) {
@@ -45,7 +46,7 @@ let AuthService = class AuthService {
         ;
         const hashPassword = await bcrypt.hash(password, 10);
         try {
-            const user = await this.userRepo.save(Object.assign({ email, password: hashPassword }, rest));
+            const user = await this.userRepo.create(Object.assign({ email, password: hashPassword }, rest));
             await this.userRepo.save(user);
             delete user.password;
             return user;
