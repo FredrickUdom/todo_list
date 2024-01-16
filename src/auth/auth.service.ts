@@ -99,7 +99,7 @@ export class AuthService {
           let id =decoded["id"];
           let user= await this.userRepo.findOneBy({id});
           
-    return {id,name:user.userName,email:user.email,role:user.role};
+    return {id:id, name:user.userName, email:user.email, role:user.role};
         } catch (error) {
           throw new UnauthorizedException('Invalid token');
         }
