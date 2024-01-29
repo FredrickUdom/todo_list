@@ -12,14 +12,9 @@ import { DatabaseModule } from './database/database.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
-    
-
     TodoModule,
 
-    DatabaseModule,
-
-    // AuthModule,
+    DatabaseModule
     
   ],
   controllers: [],

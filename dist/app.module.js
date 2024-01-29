@@ -21,7 +21,7 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
             }),
             todo_module_1.TodoModule,
-            database_module_1.DatabaseModule,
+            database_module_1.DatabaseModule
         ],
         controllers: [],
         providers: [],
