@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './todo/constant/constant';
 import { AuthModule } from './auth/auth.module';
+import { DatabaseModule } from './database/database.module';
 
 
 @Module({
@@ -12,21 +13,11 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
 
-    TypeOrmModule.forRootAsync({
-      useFactory:(configService:ConfigService)=> ({
-        type: 'postgres',
-        host: configService.getOrThrow('DB_HOST'),
-        port: configService.getOrThrow('DB_PORT'),
-        username: configService.getOrThrow('DB_USER'),
-        password: configService.getOrThrow('DB_PASSWORD'),
-        database: configService.getOrThrow('DB_NAME'),
-        entities: entities,
-        synchronize: configService.getOrThrow('DB_SYYNCHRONIZE'),
-      }),
-      inject:[ConfigService]
-    }),
+    
 
     TodoModule,
+
+    DatabaseModule,
 
     // AuthModule,
     

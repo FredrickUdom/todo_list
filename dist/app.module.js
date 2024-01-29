@@ -10,8 +10,7 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const todo_module_1 = require("./todo/todo.module");
 const config_1 = require("@nestjs/config");
-const typeorm_1 = require("@nestjs/typeorm");
-const constant_1 = require("./todo/constant/constant");
+const database_module_1 = require("./database/database.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -21,20 +20,8 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
             }),
-            typeorm_1.TypeOrmModule.forRootAsync({
-                useFactory: (configService) => ({
-                    type: 'postgres',
-                    host: configService.getOrThrow('DB_HOST'),
-                    port: configService.getOrThrow('DB_PORT'),
-                    username: configService.getOrThrow('DB_USER'),
-                    password: configService.getOrThrow('DB_PASSWORD'),
-                    database: configService.getOrThrow('DB_NAME'),
-                    entities: constant_1.entities,
-                    synchronize: configService.getOrThrow('DB_SYYNCHRONIZE'),
-                }),
-                inject: [config_1.ConfigService]
-            }),
             todo_module_1.TodoModule,
+            database_module_1.DatabaseModule,
         ],
         controllers: [],
         providers: [],

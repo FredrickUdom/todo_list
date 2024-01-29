@@ -106,7 +106,7 @@ let AuthService = class AuthService {
                 const decoded = this.jwtService.verify(token);
                 let id = decoded["id"];
                 let user = await this.userRepo.findOneBy({ id });
-                return { id, name: user.userName, email: user.email, role: user.role };
+                return { id: id, name: user.userName, email: user.email, role: user.role };
             }
             catch (error) {
                 throw new common_1.UnauthorizedException('Invalid token');
