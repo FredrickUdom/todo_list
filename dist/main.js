@@ -16,6 +16,7 @@ async function bootstrap() {
         origin: 'http://localhost:3000'
     });
     app.use(session({
+        name: 'Todo_Api_Session',
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
