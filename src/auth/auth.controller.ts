@@ -29,8 +29,8 @@ export class AuthController {
     }
 
     @Get()
-    @UseGuards(AuthGuard(),RolesGuard)
-    @Roles('admin','vendor')
+    // @UseGuards(AuthGuard(),RolesGuard)
+    // @Roles('admin','vendor')
     async findUser(){
         return await this.authService.findAllUser()
     }
