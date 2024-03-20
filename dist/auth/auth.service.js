@@ -136,7 +136,8 @@ let AuthService = class AuthService {
         }
     }
     async findAllUser() {
-        return await this.userRepo.find();
+        const user = await this.userRepo.find();
+        return user;
     }
 };
 exports.AuthService = AuthService;

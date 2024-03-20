@@ -12,8 +12,8 @@ export class signupDto{
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(8, {message: 'sorry you must put in 8 xter'})
-    @MaxLength(16)
+    @MinLength(8, {message: 'sorry you must put in 8 character'})
+    @MaxLength(16, {message: 'password should not be more than 16 characters'})
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, {message: 'password must contain atleast One Uppercase, One number and One special key'})
     password: string;
 
